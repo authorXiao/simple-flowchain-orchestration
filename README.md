@@ -2,7 +2,7 @@
 一个自研的轻量级的通用流程链编排工具
 
 ## 设计
-![Pandao editor.md](https://github.com/waltertan1988/simple-flowchain-orchestration/blob/master/doc/设计类图.png?raw=true "设计类图.png")
+![Pandao editor.md](https://github.com/waltertan1988/simple-flowchain-orchestration/blob/master/doc/class_design.png?raw=true "class_design.png")
 
 ## 开始使用
 * 参考：[使用范例](https://github.com/waltertan1988/simple-flowchain-orchestration/blob/main/src/test/java/com/walter/orchestration/test/DemoChainTest.java)
