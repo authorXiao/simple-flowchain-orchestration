@@ -26,6 +26,9 @@ public class DemoChainTest extends BaseTests {
     @Autowired
     private DemoPayVipChain demoPayVipChain;
 
+    /**
+     * 范例 1：前10位参与某活动的用户，获得vip资格，且vip可获得小礼品
+     */
     @Test
     public void demoActivityChainTest(){
 
@@ -44,6 +47,9 @@ public class DemoChainTest extends BaseTests {
         log.info(">>>>>>test end. req:{}, res:{}", req, res);
     }
 
+    /**
+     * 范例 2：购买vip获得vip资格，vip可获得小礼品
+     */
     @Test
     public void demoPayVipChainTest(){
 

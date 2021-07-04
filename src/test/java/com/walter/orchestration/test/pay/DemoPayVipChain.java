@@ -26,11 +26,11 @@ import java.util.Map;
 @Component
 public class DemoPayVipChain extends AbstractChain {
     @Autowired
-    @ChainOrder(1)
+    @ChainOrder(1) // 定义链节点的执行顺序（声明方式实现）
     private DemoPayNode demoPayNode;
     @Autowired
     @ChainOrder(2)
-    private DemoVipGiftNode demoVipGiftNode;
+    private DemoVipGiftNode demoVipGiftNode; // 可复用的业务节点
 
     @Override
     protected void registChainNodeParamResolver(Map<Class<? extends AbstractChainNode>, NodeParamResolver> chainNodeParamResolverMap) {
@@ -71,7 +71,7 @@ public class DemoPayVipChain extends AbstractChain {
     }
 
     /**
-     * 购买vip
+     * 以【内部类】方式定义链节点，实现：购买vip
      * @author tyx
      * @date 2021/6/29
      *

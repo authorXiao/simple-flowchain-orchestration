@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +28,17 @@ import java.util.Map;
 @Component
 public class DemoActivityChain extends AbstractChain {
     @Autowired
-    @ChainOrder(1)
-    private DemoVipGiftNode demoVipGiftNode;
+    private DemoVipGiftNode demoVipGiftNode;// 可复用的业务节点
+
+    /**
+     * 定义链节点的顺序（编程方式实现）
+     * @return
+     */
+    @Override
+    protected List<AbstractChainNode> defineChainNodeList() {
+        List<AbstractChainNode> chainNodeList = Arrays.asList(demoVipGiftNode);
+        return chainNodeList;
+    }
 
     @Override
     protected void registChainNodeParamResolver(Map<Class<? extends AbstractChainNode>, NodeParamResolver> chainNodeParamResolverMap) {
@@ -35,7 +46,7 @@ public class DemoActivityChain extends AbstractChain {
 
         chainNodeParamResolverMap.put(DemoVipGiftNode.class, context -> {
             DemoActivityChainReq demoActivityChainReq = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.REQ));
-            DemoActivityTopEnterNodeRes demoChainVipGiftRes = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.PRE_PROCESS_CHAIN_RES));
+            PreProcessChainRes demoChainVipGiftRes = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.PRE_PROCESS_CHAIN_RES));
 
             DemoVipGiftReq req = new DemoVipGiftReq();
             req.setUid(demoActivityChainReq.getUid()).setVip(demoChainVipGiftRes.isVip());
@@ -44,14 +55,14 @@ public class DemoActivityChain extends AbstractChain {
     }
 
     /**
-     * 前10位参与某活动的用户，获得vip资格
+     * 通过调用链的【前处理方法】，实现：前10位参与某活动的用户，获得vip资格
      * @param context
      */
     @Override
     protected void preProcessChain(final ChainContext context) {
         final int ID_THRESHOLD = 10;
         DemoActivityChainReq demoActivityChainReq = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.REQ));
-        DemoActivityTopEnterNodeRes res = new DemoActivityTopEnterNodeRes();
+        PreProcessChainRes res = new PreProcessChainRes();
 
         if(demoActivityChainReq.getId() <= ID_THRESHOLD){
             res.setVip(true);
@@ -65,7 +76,7 @@ public class DemoActivityChain extends AbstractChain {
 
     @Override
     public void postProcessChain(ChainContext context) {
-        DemoActivityTopEnterNodeRes demoActivityChainTopEnterNodeRes = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.PRE_PROCESS_CHAIN_RES));
+        PreProcessChainRes demoActivityChainTopEnterNodeRes = CastUtil.cast(context.get(DemoChainContextKey.DemoActivityChain.PRE_PROCESS_CHAIN_RES));
         DemoVipGiftRes demoChainVipGiftRes = CastUtil.cast(context.get(demoVipGiftNode.getResponseContextKey()));
 
         DemoActivityChainRes res = new DemoActivityChainRes()
@@ -76,7 +87,7 @@ public class DemoActivityChain extends AbstractChain {
 
     @Data
     @Accessors(chain = true)
-    public class DemoActivityTopEnterNodeRes {
+    private class PreProcessChainRes {
         private boolean isVip;
     }
 }
