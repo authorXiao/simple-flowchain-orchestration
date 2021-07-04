@@ -102,7 +102,7 @@ public abstract class AbstractChain implements InitializingBean {
      * 所有链节点执行完毕后，将执行此方法（用于汇总各个节点的处理结果）
      * @param context
      */
-    public void postProcessChain(ChainContext context){}
+    protected void postProcessChain(ChainContext context){}
 
     /**
      * 覆盖此方法可定义调用链的串联节点列表。注：此方法的顺序会覆盖由@{@link ChainOrder}所定义的顺序
